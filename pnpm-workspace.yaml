@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - napi-postinstall
+  - oxc-resolver
+  - sharp
+  - unrs-resolver
