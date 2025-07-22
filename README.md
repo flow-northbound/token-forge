@@ -1,4 +1,4 @@
-# ☭ \* UI Token Forge
+# ⚒︎ \* UI Token Forge
 
 > **UI Token Forge** - A tool to generate base UI design tokens, based on choices of colors and fonts, following the principles from the Practical UI design book. The tool will output an overview, Figma file, and CSS for a React web app.
 
