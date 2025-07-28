@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
+import { useState } from "react";
+import Link from "next/link";
 
 const spacingScales = [
   { name: "Linear", multiplier: 1 },
   { name: "Fibonacci", multiplier: 1.618 },
   { name: "Golden Ratio", multiplier: 1.618 },
   { name: "Material Design", multiplier: 2 },
-]
+];
 
 export default function SpacingPage() {
-  const [baseSpacing, setBaseSpacing] = useState(4)
-  const [spacingScale, setSpacingScale] = useState(2)
-  const [baseRadius, setBaseRadius] = useState(4)
-  const [radiusScale, setRadiusScale] = useState(2)
-  
+  const [baseSpacing, setBaseSpacing] = useState(4);
+  const [spacingScale, setSpacingScale] = useState(2);
+  const [baseRadius, setBaseRadius] = useState(4);
+  const [radiusScale, setRadiusScale] = useState(2);
+
   const generateSpacing = () => {
     if (spacingScale === 1.618) {
       // Fibonacci sequence
-      const fib = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+      const fib = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
       return {
         0: 0,
         0.5: baseSpacing / 2,
@@ -31,7 +31,7 @@ export default function SpacingPage() {
         6: baseSpacing * fib[7],
         8: baseSpacing * fib[8],
         10: baseSpacing * fib[9],
-      }
+      };
     } else {
       // Linear or Material scale
       return {
@@ -49,10 +49,10 @@ export default function SpacingPage() {
         16: baseSpacing * 16,
         20: baseSpacing * 20,
         24: baseSpacing * 24,
-      }
+      };
     }
-  }
-  
+  };
+
   const generateRadius = () => {
     return {
       none: 0,
@@ -64,28 +64,32 @@ export default function SpacingPage() {
       "2xl": baseRadius * 4,
       "3xl": baseRadius * 6,
       full: 9999,
-    }
-  }
-  
-  const spacing = generateSpacing()
-  const radius = generateRadius()
+    };
+  };
+
+  const spacing = generateSpacing();
+  const radius = generateRadius();
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Spacing & Radius</h1>
         <p className="mt-2 text-muted-foreground">
-          Define component spacing and border radius values for consistent layouts.
+          Define component spacing and border radius values for consistent
+          layouts.
         </p>
       </div>
-      
+
       <div className="grid gap-8 lg:grid-cols-2">
         <div>
           <h2 className="mb-6 text-xl font-semibold">Spacing</h2>
-          
+
           <div className="space-y-4 mb-8">
             <div>
-              <label htmlFor="base-spacing" className="block text-sm font-medium mb-2">
+              <label
+                htmlFor="base-spacing"
+                className="block text-sm font-medium mb-2"
+              >
                 Base Spacing Unit (px)
               </label>
               <input
@@ -98,9 +102,12 @@ export default function SpacingPage() {
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               />
             </div>
-            
+
             <div>
-              <label htmlFor="spacing-scale" className="block text-sm font-medium mb-2">
+              <label
+                htmlFor="spacing-scale"
+                className="block text-sm font-medium mb-2"
+              >
                 Spacing Scale
               </label>
               <select
@@ -117,28 +124,33 @@ export default function SpacingPage() {
               </select>
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <h3 className="text-sm font-medium mb-4">Spacing Values</h3>
             {Object.entries(spacing).map(([key, value]) => (
               <div key={key} className="flex items-center gap-4">
                 <span className="w-12 text-sm font-mono">{key}</span>
-                <div 
+                <div
                   className="h-8 bg-primary/20 border border-primary/40"
                   style={{ width: `${value}px` }}
                 />
-                <span className="text-sm font-mono text-muted-foreground">{value}px</span>
+                <span className="text-sm font-mono text-muted-foreground">
+                  {value}px
+                </span>
               </div>
             ))}
           </div>
         </div>
-        
+
         <div>
           <h2 className="mb-6 text-xl font-semibold">Border Radius</h2>
-          
+
           <div className="space-y-4 mb-8">
             <div>
-              <label htmlFor="base-radius" className="block text-sm font-medium mb-2">
+              <label
+                htmlFor="base-radius"
+                className="block text-sm font-medium mb-2"
+              >
                 Base Radius Unit (px)
               </label>
               <input
@@ -152,13 +164,13 @@ export default function SpacingPage() {
               />
             </div>
           </div>
-          
+
           <div className="space-y-4">
             <h3 className="text-sm font-medium mb-4">Radius Values</h3>
             {Object.entries(radius).map(([key, value]) => (
               <div key={key} className="flex items-center gap-4">
                 <span className="w-16 text-sm font-mono">{key}</span>
-                <div 
+                <div
                   className="h-16 w-16 bg-primary/20 border-2 border-primary/40"
                   style={{ borderRadius: `${value}px` }}
                 />
@@ -170,7 +182,7 @@ export default function SpacingPage() {
           </div>
         </div>
       </div>
-      
+
       <div className="mt-12 flex justify-between">
         <Link
           href="/typography"
@@ -186,5 +198,5 @@ export default function SpacingPage() {
         </Link>
       </div>
     </div>
-  )
+  );
 }

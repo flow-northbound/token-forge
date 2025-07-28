@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "pnpm exec biome format --write ./src",
     "knip": "knip",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",

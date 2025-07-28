@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
+import { useState } from "react";
+import Link from "next/link";
 
 export default function ExportPage() {
-  const [exportFormat, setExportFormat] = useState("css")
-  
+  const [exportFormat, setExportFormat] = useState("css");
+
   // Mock token data - in a real app, this would come from a global state/context
   const tokens = {
     colors: {
@@ -20,7 +20,7 @@ export default function ExportPage() {
         700: "#1d4ed8",
         800: "#1e40af",
         900: "#1e3a8a",
-        950: "#172554"
+        950: "#172554",
       },
       secondary: {
         50: "#f5f3ff",
@@ -33,13 +33,13 @@ export default function ExportPage() {
         700: "#6d28d9",
         800: "#5b21b6",
         900: "#4c1d95",
-        950: "#2e1065"
-      }
+        950: "#2e1065",
+      },
     },
     typography: {
       fontFamily: {
         heading: "Inter, sans-serif",
-        body: "Inter, sans-serif"
+        body: "Inter, sans-serif",
       },
       fontSize: {
         xs: "12px",
@@ -50,8 +50,8 @@ export default function ExportPage() {
         "2xl": "24px",
         "3xl": "30px",
         "4xl": "36px",
-        "5xl": "48px"
-      }
+        "5xl": "48px",
+      },
     },
     spacing: {
       0: "0px",
@@ -67,7 +67,7 @@ export default function ExportPage() {
       12: "48px",
       16: "64px",
       20: "80px",
-      24: "96px"
+      24: "96px",
     },
     borderRadius: {
       none: "0px",
@@ -78,114 +78,119 @@ export default function ExportPage() {
       xl: "12px",
       "2xl": "16px",
       "3xl": "24px",
-      full: "9999px"
-    }
-  }
-  
+      full: "9999px",
+    },
+  };
+
   const generateCSS = () => {
-    let css = ":root {\n"
-    
+    let css = ":root {\n";
+
     // Colors
     Object.entries(tokens.colors).forEach(([colorName, shades]) => {
       Object.entries(shades).forEach(([shade, value]) => {
-        css += `  --color-${colorName}-${shade}: ${value};\n`
-      })
-    })
-    
+        css += `  --color-${colorName}-${shade}: ${value};\n`;
+      });
+    });
+
     // Typography
-    css += `\n  /* Typography */\n`
-    css += `  --font-heading: ${tokens.typography.fontFamily.heading};\n`
-    css += `  --font-body: ${tokens.typography.fontFamily.body};\n`
-    
+    css += `\n  /* Typography */\n`;
+    css += `  --font-heading: ${tokens.typography.fontFamily.heading};\n`;
+    css += `  --font-body: ${tokens.typography.fontFamily.body};\n`;
+
     Object.entries(tokens.typography.fontSize).forEach(([size, value]) => {
-      css += `  --font-size-${size}: ${value};\n`
-    })
-    
+      css += `  --font-size-${size}: ${value};\n`;
+    });
+
     // Spacing
-    css += `\n  /* Spacing */\n`
+    css += `\n  /* Spacing */\n`;
     Object.entries(tokens.spacing).forEach(([size, value]) => {
-      css += `  --spacing-${size}: ${value};\n`
-    })
-    
+      css += `  --spacing-${size}: ${value};\n`;
+    });
+
     // Border Radius
-    css += `\n  /* Border Radius */\n`
+    css += `\n  /* Border Radius */\n`;
     Object.entries(tokens.borderRadius).forEach(([size, value]) => {
-      css += `  --radius-${size}: ${value};\n`
-    })
-    
-    css += "}"
-    return css
-  }
-  
+      css += `  --radius-${size}: ${value};\n`;
+    });
+
+    css += "}";
+    return css;
+  };
+
   const generateJSON = () => {
-    return JSON.stringify(tokens, null, 2)
-  }
-  
+    return JSON.stringify(tokens, null, 2);
+  };
+
   const generateJS = () => {
-    return `export const tokens = ${JSON.stringify(tokens, null, 2)}`
-  }
-  
+    return `export const tokens = ${JSON.stringify(tokens, null, 2)}`;
+  };
+
   const generateSCSS = () => {
-    let scss = ""
-    
+    let scss = "";
+
     // Colors
     Object.entries(tokens.colors).forEach(([colorName, shades]) => {
       Object.entries(shades).forEach(([shade, value]) => {
-        scss += `$color-${colorName}-${shade}: ${value};\n`
-      })
-    })
-    
+        scss += `$color-${colorName}-${shade}: ${value};\n`;
+      });
+    });
+
     // Typography
-    scss += `\n// Typography\n`
-    scss += `$font-heading: ${tokens.typography.fontFamily.heading};\n`
-    scss += `$font-body: ${tokens.typography.fontFamily.body};\n`
-    
+    scss += `\n// Typography\n`;
+    scss += `$font-heading: ${tokens.typography.fontFamily.heading};\n`;
+    scss += `$font-body: ${tokens.typography.fontFamily.body};\n`;
+
     Object.entries(tokens.typography.fontSize).forEach(([size, value]) => {
-      scss += `$font-size-${size}: ${value};\n`
-    })
-    
+      scss += `$font-size-${size}: ${value};\n`;
+    });
+
     // Spacing
-    scss += `\n// Spacing\n`
+    scss += `\n// Spacing\n`;
     Object.entries(tokens.spacing).forEach(([size, value]) => {
-      scss += `$spacing-${size}: ${value};\n`
-    })
-    
+      scss += `$spacing-${size}: ${value};\n`;
+    });
+
     // Border Radius
-    scss += `\n// Border Radius\n`
+    scss += `\n// Border Radius\n`;
     Object.entries(tokens.borderRadius).forEach(([size, value]) => {
-      scss += `$radius-${size}: ${value};\n`
-    })
-    
-    return scss
-  }
-  
+      scss += `$radius-${size}: ${value};\n`;
+    });
+
+    return scss;
+  };
+
   const getExportContent = () => {
     switch (exportFormat) {
-      case "css": return generateCSS()
-      case "json": return generateJSON()
-      case "js": return generateJS()
-      case "scss": return generateSCSS()
-      default: return ""
+      case "css":
+        return generateCSS();
+      case "json":
+        return generateJSON();
+      case "js":
+        return generateJS();
+      case "scss":
+        return generateSCSS();
+      default:
+        return "";
     }
-  }
-  
-  const exportContent = getExportContent()
-  
+  };
+
+  const exportContent = getExportContent();
+
   const downloadFile = () => {
-    const blob = new Blob([exportContent], { type: "text/plain" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = `design-tokens.${exportFormat}`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
-  
+    const blob = new Blob([exportContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `design-tokens.${exportFormat}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(exportContent)
-  }
+    navigator.clipboard.writeText(exportContent);
+  };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -195,7 +200,7 @@ export default function ExportPage() {
           Export your design tokens in various formats for use in your projects.
         </p>
       </div>
-      
+
       <div className="mb-8">
         <label htmlFor="format" className="block text-sm font-medium mb-2">
           Export Format
@@ -212,7 +217,7 @@ export default function ExportPage() {
           <option value="js">JavaScript</option>
         </select>
       </div>
-      
+
       <div className="mb-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Preview</h2>
@@ -231,12 +236,12 @@ export default function ExportPage() {
             </button>
           </div>
         </div>
-        
+
         <pre className="overflow-x-auto rounded-lg border bg-muted p-4">
           <code className="text-sm">{exportContent}</code>
         </pre>
       </div>
-      
+
       <div className="flex justify-between">
         <Link
           href="/spacing"
@@ -252,5 +257,5 @@ export default function ExportPage() {
         </Link>
       </div>
     </div>
-  )
+  );
 }

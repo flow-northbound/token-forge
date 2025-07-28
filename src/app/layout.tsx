@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Token Forge - UI Design System Generator",
-  description: "Generate base UI design tokens following Practical UI design principles",
+  description:
+    "Generate base UI design tokens following Practical UI design principles",
 };
 
 export default function RootLayout({
@@ -29,9 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navigation />
-        <main className="min-h-screen bg-background">
-          {children}
-        </main>
+        <main className="min-h-screen bg-background">{children}</main>
       </body>
     </html>
   );

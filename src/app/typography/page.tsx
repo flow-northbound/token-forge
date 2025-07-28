@@ -1,61 +1,137 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
+import { useState } from "react";
+import Link from "next/link";
 
 const fontOptions = [
   // Sans-serif fonts
   { name: "Inter", value: "Inter, sans-serif", category: "Sans-serif" },
   { name: "Roboto", value: "Roboto, sans-serif", category: "Sans-serif" },
-  { name: "Open Sans", value: "'Open Sans', sans-serif", category: "Sans-serif" },
+  {
+    name: "Open Sans",
+    value: "'Open Sans', sans-serif",
+    category: "Sans-serif",
+  },
   { name: "Lato", value: "Lato, sans-serif", category: "Sans-serif" },
   { name: "Poppins", value: "Poppins, sans-serif", category: "Sans-serif" },
-  { name: "Montserrat", value: "Montserrat, sans-serif", category: "Sans-serif" },
+  {
+    name: "Montserrat",
+    value: "Montserrat, sans-serif",
+    category: "Sans-serif",
+  },
   { name: "Raleway", value: "Raleway, sans-serif", category: "Sans-serif" },
-  { name: "Source Sans Pro", value: "'Source Sans Pro', sans-serif", category: "Sans-serif" },
+  {
+    name: "Source Sans Pro",
+    value: "'Source Sans Pro', sans-serif",
+    category: "Sans-serif",
+  },
   { name: "Nunito", value: "Nunito, sans-serif", category: "Sans-serif" },
-  { name: "Work Sans", value: "'Work Sans', sans-serif", category: "Sans-serif" },
+  {
+    name: "Work Sans",
+    value: "'Work Sans', sans-serif",
+    category: "Sans-serif",
+  },
   { name: "DM Sans", value: "'DM Sans', sans-serif", category: "Sans-serif" },
   { name: "Manrope", value: "Manrope, sans-serif", category: "Sans-serif" },
-  { name: "Space Grotesk", value: "'Space Grotesk', sans-serif", category: "Sans-serif" },
+  {
+    name: "Space Grotesk",
+    value: "'Space Grotesk', sans-serif",
+    category: "Sans-serif",
+  },
   { name: "Outfit", value: "Outfit, sans-serif", category: "Sans-serif" },
-  { name: "Plus Jakarta Sans", value: "'Plus Jakarta Sans', sans-serif", category: "Sans-serif" },
-  
+  {
+    name: "Plus Jakarta Sans",
+    value: "'Plus Jakarta Sans', sans-serif",
+    category: "Sans-serif",
+  },
+
   // Serif fonts
-  { name: "Playfair Display", value: "'Playfair Display', serif", category: "Serif" },
+  {
+    name: "Playfair Display",
+    value: "'Playfair Display', serif",
+    category: "Serif",
+  },
   { name: "Merriweather", value: "Merriweather, serif", category: "Serif" },
   { name: "Georgia", value: "Georgia, serif", category: "Serif" },
   { name: "Lora", value: "Lora, serif", category: "Serif" },
   { name: "Crimson Text", value: "'Crimson Text', serif", category: "Serif" },
   { name: "PT Serif", value: "'PT Serif', serif", category: "Serif" },
   { name: "Bitter", value: "Bitter, serif", category: "Serif" },
-  { name: "Libre Baskerville", value: "'Libre Baskerville', serif", category: "Serif" },
+  {
+    name: "Libre Baskerville",
+    value: "'Libre Baskerville', serif",
+    category: "Serif",
+  },
   { name: "EB Garamond", value: "'EB Garamond', serif", category: "Serif" },
   { name: "Cormorant", value: "Cormorant, serif", category: "Serif" },
-  
+
   // Display fonts
   { name: "Bebas Neue", value: "'Bebas Neue', display", category: "Display" },
   { name: "Righteous", value: "Righteous, display", category: "Display" },
-  { name: "Alfa Slab One", value: "'Alfa Slab One', display", category: "Display" },
-  { name: "Archivo Black", value: "'Archivo Black', display", category: "Display" },
+  {
+    name: "Alfa Slab One",
+    value: "'Alfa Slab One', display",
+    category: "Display",
+  },
+  {
+    name: "Archivo Black",
+    value: "'Archivo Black', display",
+    category: "Display",
+  },
   { name: "Passion One", value: "'Passion One', display", category: "Display" },
-  
+
   // Monospace fonts
-  { name: "Roboto Mono", value: "'Roboto Mono', monospace", category: "Monospace" },
-  { name: "JetBrains Mono", value: "'JetBrains Mono', monospace", category: "Monospace" },
-  { name: "Source Code Pro", value: "'Source Code Pro', monospace", category: "Monospace" },
-  { name: "IBM Plex Mono", value: "'IBM Plex Mono', monospace", category: "Monospace" },
+  {
+    name: "Roboto Mono",
+    value: "'Roboto Mono', monospace",
+    category: "Monospace",
+  },
+  {
+    name: "JetBrains Mono",
+    value: "'JetBrains Mono', monospace",
+    category: "Monospace",
+  },
+  {
+    name: "Source Code Pro",
+    value: "'Source Code Pro', monospace",
+    category: "Monospace",
+  },
+  {
+    name: "IBM Plex Mono",
+    value: "'IBM Plex Mono', monospace",
+    category: "Monospace",
+  },
   { name: "Fira Code", value: "'Fira Code', monospace", category: "Monospace" },
-  { name: "Space Mono", value: "'Space Mono', monospace", category: "Monospace" },
-  { name: "Inconsolata", value: "Inconsolata, monospace", category: "Monospace" },
-  
+  {
+    name: "Space Mono",
+    value: "'Space Mono', monospace",
+    category: "Monospace",
+  },
+  {
+    name: "Inconsolata",
+    value: "Inconsolata, monospace",
+    category: "Monospace",
+  },
+
   // System fonts
-  { name: "System UI", value: "system-ui, -apple-system, sans-serif", category: "System" },
+  {
+    name: "System UI",
+    value: "system-ui, -apple-system, sans-serif",
+    category: "System",
+  },
   { name: "Arial", value: "Arial, sans-serif", category: "System" },
   { name: "Helvetica", value: "Helvetica, sans-serif", category: "System" },
-  { name: "Times New Roman", value: "'Times New Roman', serif", category: "System" },
-  { name: "Courier New", value: "'Courier New', monospace", category: "System" },
-]
+  {
+    name: "Times New Roman",
+    value: "'Times New Roman', serif",
+    category: "System",
+  },
+  {
+    name: "Courier New",
+    value: "'Courier New', monospace",
+    category: "System",
+  },
+];
 
 const typeScales = [
   { name: "Minor Third", ratio: 1.2 },
@@ -64,15 +140,15 @@ const typeScales = [
   { name: "Augmented Fourth", ratio: 1.414 },
   { name: "Perfect Fifth", ratio: 1.5 },
   { name: "Golden Ratio", ratio: 1.618 },
-]
+];
 
 export default function TypographyPage() {
-  const [headingFont, setHeadingFont] = useState("Inter, sans-serif")
-  const [bodyFont, setBodyFont] = useState("Inter, sans-serif")
-  const [baseSize, setBaseSize] = useState(16)
-  const [typeScale, setTypeScale] = useState(1.25)
-  const [baseLineHeight, setBaseLineHeight] = useState(1.5)
-  
+  const [headingFont, setHeadingFont] = useState("Inter, sans-serif");
+  const [bodyFont, setBodyFont] = useState("Inter, sans-serif");
+  const [baseSize, setBaseSize] = useState(16);
+  const [typeScale, setTypeScale] = useState(1.25);
+  const [baseLineHeight, setBaseLineHeight] = useState(1.5);
+
   const generateSizes = () => {
     return {
       xs: Math.ceil(baseSize / (typeScale * typeScale)),
@@ -84,44 +160,48 @@ export default function TypographyPage() {
       "3xl": Math.ceil(baseSize * Math.pow(typeScale, 4)),
       "4xl": Math.ceil(baseSize * Math.pow(typeScale, 5)),
       "5xl": Math.ceil(baseSize * Math.pow(typeScale, 6)),
-    }
-  }
-  
+    };
+  };
+
   const calculateLineHeight = (fontSize: number) => {
-    const minLineHeight = 1.0
-    const maxLineHeight = baseLineHeight
-    const minFontSize = sizes.xs
-    const maxFontSize = sizes["5xl"]
-    
+    const minLineHeight = 1.0;
+    const maxLineHeight = baseLineHeight;
+    const minFontSize = sizes.xs;
+    const maxFontSize = sizes["5xl"];
+
     // Linear interpolation: larger fonts get smaller line heights
-    const ratio = (fontSize - minFontSize) / (maxFontSize - minFontSize)
-    const lineHeight = maxLineHeight - (maxLineHeight - minLineHeight) * ratio
-    
-    return Math.round(lineHeight * 100) / 100
-  }
-  
-  const sizes = generateSizes()
-  
+    const ratio = (fontSize - minFontSize) / (maxFontSize - minFontSize);
+    const lineHeight = maxLineHeight - (maxLineHeight - minLineHeight) * ratio;
+
+    return Math.round(lineHeight * 100) / 100;
+  };
+
+  const sizes = generateSizes();
+
   const sizesWithLineHeight = Object.entries(sizes).map(([key, fontSize]) => ({
     key,
     fontSize,
     lineHeight: calculateLineHeight(fontSize),
-    lineHeightPx: Math.ceil(fontSize * calculateLineHeight(fontSize))
-  }))
+    lineHeightPx: Math.ceil(fontSize * calculateLineHeight(fontSize)),
+  }));
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Typography</h1>
         <p className="mt-2 text-muted-foreground">
-          Choose fonts and define your typography scale for consistent text styling.
+          Choose fonts and define your typography scale for consistent text
+          styling.
         </p>
       </div>
-      
+
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="space-y-8">
           <div>
-            <label htmlFor="heading-font" className="block text-sm font-medium mb-2">
+            <label
+              htmlFor="heading-font"
+              className="block text-sm font-medium mb-2"
+            >
               Heading Font
             </label>
             <select
@@ -137,9 +217,12 @@ export default function TypographyPage() {
               ))}
             </select>
           </div>
-          
+
           <div>
-            <label htmlFor="body-font" className="block text-sm font-medium mb-2">
+            <label
+              htmlFor="body-font"
+              className="block text-sm font-medium mb-2"
+            >
               Body Font
             </label>
             <select
@@ -155,9 +238,12 @@ export default function TypographyPage() {
               ))}
             </select>
           </div>
-          
+
           <div>
-            <label htmlFor="base-size" className="block text-sm font-medium mb-2">
+            <label
+              htmlFor="base-size"
+              className="block text-sm font-medium mb-2"
+            >
               Base Font Size (px)
             </label>
             <input
@@ -170,9 +256,12 @@ export default function TypographyPage() {
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
           </div>
-          
+
           <div>
-            <label htmlFor="type-scale" className="block text-sm font-medium mb-2">
+            <label
+              htmlFor="type-scale"
+              className="block text-sm font-medium mb-2"
+            >
               Type Scale
             </label>
             <select
@@ -188,9 +277,12 @@ export default function TypographyPage() {
               ))}
             </select>
           </div>
-          
+
           <div>
-            <label htmlFor="line-height" className="block text-sm font-medium mb-2">
+            <label
+              htmlFor="line-height"
+              className="block text-sm font-medium mb-2"
+            >
               Base Line Height
             </label>
             <div className="flex items-center gap-4">
@@ -221,41 +313,46 @@ export default function TypographyPage() {
             </div>
           </div>
         </div>
-        
+
         <div className="space-y-6">
           <h3 className="text-sm font-medium">Preview</h3>
-          
+
           <div className="space-y-4 rounded-lg border p-6">
-            {sizesWithLineHeight.slice().reverse().map((item) => {
-              const isHeading = ["xl", "2xl", "3xl", "4xl", "5xl"].includes(item.key)
-              const font = isHeading ? headingFont : bodyFont
-              const text = {
-                "5xl": "Display",
-                "4xl": "Heading 1",
-                "3xl": "Heading 2",
-                "2xl": "Heading 3",
-                xl: "Heading 4",
-                lg: "Large text - Lorem ipsum dolor sit amet.",
-                base: "Body text - Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                sm: "Small text - Lorem ipsum dolor sit amet.",
-                xs: "Extra small text - Lorem ipsum dolor sit amet."
-              }[item.key]
-              
-              return (
-                <div 
-                  key={item.key}
-                  style={{ 
-                    fontFamily: font, 
-                    fontSize: `${item.fontSize}px`,
-                    lineHeight: item.lineHeight
-                  }}
-                >
-                  {text}
-                </div>
-              )
-            })}
+            {sizesWithLineHeight
+              .slice()
+              .reverse()
+              .map((item) => {
+                const isHeading = ["xl", "2xl", "3xl", "4xl", "5xl"].includes(
+                  item.key,
+                );
+                const font = isHeading ? headingFont : bodyFont;
+                const text = {
+                  "5xl": "Display",
+                  "4xl": "Heading 1",
+                  "3xl": "Heading 2",
+                  "2xl": "Heading 3",
+                  xl: "Heading 4",
+                  lg: "Large text - Lorem ipsum dolor sit amet.",
+                  base: "Body text - Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                  sm: "Small text - Lorem ipsum dolor sit amet.",
+                  xs: "Extra small text - Lorem ipsum dolor sit amet.",
+                }[item.key];
+
+                return (
+                  <div
+                    key={item.key}
+                    style={{
+                      fontFamily: font,
+                      fontSize: `${item.fontSize}px`,
+                      lineHeight: item.lineHeight,
+                    }}
+                  >
+                    {text}
+                  </div>
+                );
+              })}
           </div>
-          
+
           <div className="rounded-lg border p-4">
             <h4 className="mb-3 text-sm font-medium">Typography Scale</h4>
             <div className="overflow-hidden rounded border">
@@ -263,27 +360,47 @@ export default function TypographyPage() {
                 <thead className="border-b bg-muted/50">
                   <tr>
                     <th className="px-3 py-2 text-left font-medium">Size</th>
-                    <th className="px-3 py-2 text-right font-medium">Font Size</th>
-                    <th className="px-3 py-2 text-right font-medium">Line Height</th>
-                    <th className="px-3 py-2 text-right font-medium">Line Height (px)</th>
+                    <th className="px-3 py-2 text-right font-medium">
+                      Font Size
+                    </th>
+                    <th className="px-3 py-2 text-right font-medium">
+                      Line Height
+                    </th>
+                    <th className="px-3 py-2 text-right font-medium">
+                      Line Height (px)
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="font-mono">
-                  {sizesWithLineHeight.slice().reverse().map((item, index) => (
-                    <tr key={item.key} className={index % 2 === 0 ? "bg-muted/20" : ""}>
-                      <td className="px-3 py-2 text-muted-foreground">{item.key}</td>
-                      <td className="px-3 py-2 text-right">{item.fontSize}px</td>
-                      <td className="px-3 py-2 text-right">{item.lineHeight}</td>
-                      <td className="px-3 py-2 text-right">{item.lineHeightPx}px</td>
-                    </tr>
-                  ))}
+                  {sizesWithLineHeight
+                    .slice()
+                    .reverse()
+                    .map((item, index) => (
+                      <tr
+                        key={item.key}
+                        className={index % 2 === 0 ? "bg-muted/20" : ""}
+                      >
+                        <td className="px-3 py-2 text-muted-foreground">
+                          {item.key}
+                        </td>
+                        <td className="px-3 py-2 text-right">
+                          {item.fontSize}px
+                        </td>
+                        <td className="px-3 py-2 text-right">
+                          {item.lineHeight}
+                        </td>
+                        <td className="px-3 py-2 text-right">
+                          {item.lineHeightPx}px
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      
+
       <div className="mt-12 flex justify-between">
         <Link
           href="/colors"
@@ -299,5 +416,5 @@ export default function TypographyPage() {
         </Link>
       </div>
     </div>
-  )
+  );
 }
