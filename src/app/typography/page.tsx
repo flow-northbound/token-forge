@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useDesignTokens } from "@/lib/design-tokens-context";
 
 const fontOptions = [
   // Sans-serif fonts
@@ -44,6 +45,10 @@ const fontOptions = [
     value: "'Plus Jakarta Sans', sans-serif",
     category: "Sans-serif",
   },
+  { name: "Figtree", value: "Figtree, sans-serif", category: "Sans-serif" },
+  { name: "Satoshi", value: "Satoshi, sans-serif", category: "Sans-serif" },
+  { name: "Urbanist", value: "Urbanist, sans-serif", category: "Sans-serif" },
+  { name: "Quicksand", value: "Quicksand, sans-serif", category: "Sans-serif" },
 
   // Serif fonts
   {
@@ -137,29 +142,53 @@ const typeScales = [
   { name: "Minor Third", ratio: 1.2 },
   { name: "Major Third", ratio: 1.25 },
   { name: "Perfect Fourth", ratio: 1.333 },
-  { name: "Augmented Fourth", ratio: 1.414 },
+  { name: "Augmented Fourth", ratio: Math.SQRT2 },
   { name: "Perfect Fifth", ratio: 1.5 },
   { name: "Golden Ratio", ratio: 1.618 },
 ];
 
 export default function TypographyPage() {
-  const [headingFont, setHeadingFont] = useState("Inter, sans-serif");
-  const [bodyFont, setBodyFont] = useState("Inter, sans-serif");
-  const [baseSize, setBaseSize] = useState(16);
-  const [typeScale, setTypeScale] = useState(1.25);
-  const [baseLineHeight, setBaseLineHeight] = useState(1.5);
+  const { tokens, updateTypography } = useDesignTokens();
+  const [headingFont, setHeadingFont] = useState(tokens.typography.headingFont);
+  const [bodyFont, setBodyFont] = useState(tokens.typography.bodyFont);
+  const [baseSize, setBaseSize] = useState(tokens.typography.baseSize);
+  const [typeScale, setTypeScale] = useState(tokens.typography.typeScale);
+  const [baseLineHeight, setBaseLineHeight] = useState(
+    tokens.typography.baseLineHeight,
+  );
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      updateTypography({
+        headingFont,
+        bodyFont,
+        baseSize,
+        typeScale,
+        baseLineHeight,
+      });
+    }, 300); // Debounce updates
+
+    return () => clearTimeout(timeoutId);
+  }, [
+    headingFont,
+    bodyFont,
+    baseSize,
+    typeScale,
+    baseLineHeight,
+    updateTypography,
+  ]);
 
   const generateSizes = () => {
     return {
-      xs: Math.ceil(baseSize / (typeScale * typeScale)),
-      sm: Math.ceil(baseSize / typeScale),
-      base: baseSize,
+      xs: Math.ceil(baseSize / typeScale),
+      sm: baseSize, // base size
+      base: baseSize, // same as sm
       lg: Math.ceil(baseSize * typeScale),
-      xl: Math.ceil(baseSize * typeScale * typeScale),
-      "2xl": Math.ceil(baseSize * Math.pow(typeScale, 3)),
-      "3xl": Math.ceil(baseSize * Math.pow(typeScale, 4)),
-      "4xl": Math.ceil(baseSize * Math.pow(typeScale, 5)),
-      "5xl": Math.ceil(baseSize * Math.pow(typeScale, 6)),
+      h4: Math.ceil(baseSize * typeScale * typeScale),
+      h3: Math.ceil(baseSize * Math.pow(typeScale, 3)),
+      h2: Math.ceil(baseSize * Math.pow(typeScale, 4)),
+      h1: Math.ceil(baseSize * Math.pow(typeScale, 5)),
+      display: Math.ceil(baseSize * Math.pow(typeScale, 6)),
     };
   };
 
@@ -167,7 +196,7 @@ export default function TypographyPage() {
     const minLineHeight = 1.0;
     const maxLineHeight = baseLineHeight;
     const minFontSize = sizes.xs;
-    const maxFontSize = sizes["5xl"];
+    const maxFontSize = sizes.display;
 
     // Linear interpolation: larger fonts get smaller line heights
     const ratio = (fontSize - minFontSize) / (maxFontSize - minFontSize);
@@ -322,20 +351,20 @@ export default function TypographyPage() {
               .slice()
               .reverse()
               .map((item) => {
-                const isHeading = ["xl", "2xl", "3xl", "4xl", "5xl"].includes(
+                const isHeading = ["h1", "h2", "h3", "h4", "display"].includes(
                   item.key,
                 );
                 const font = isHeading ? headingFont : bodyFont;
                 const text = {
-                  "5xl": "Display",
-                  "4xl": "Heading 1",
-                  "3xl": "Heading 2",
-                  "2xl": "Heading 3",
-                  xl: "Heading 4",
+                  display: "Display",
+                  h1: "Heading 1",
+                  h2: "Heading 2",
+                  h3: "Heading 3",
+                  h4: "Heading 4",
                   lg: "Large text - Lorem ipsum dolor sit amet.",
                   base: "Body text - Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                  sm: "Small text - Lorem ipsum dolor sit amet.",
-                  xs: "Extra small text - Lorem ipsum dolor sit amet.",
+                  sm: "Body text - Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                  xs: "Small text - Lorem ipsum dolor sit amet.",
                 }[item.key];
 
                 return (

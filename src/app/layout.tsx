@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { DesignTokensProvider } from "@/lib/design-tokens-context";
 import { Navigation } from "@/ui/components/navigation";
 
 const geistSans = Geist({
@@ -29,8 +30,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navigation />
-        <main className="min-h-screen bg-background">{children}</main>
+        <DesignTokensProvider>
+          <Navigation />
+          <main className="min-h-screen bg-background">{children}</main>
+        </DesignTokensProvider>
       </body>
     </html>
   );

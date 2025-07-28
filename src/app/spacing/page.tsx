@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useDesignTokens } from "@/lib/design-tokens-context";
 
 const spacingScales = [
   { name: "Linear", multiplier: 1 },
@@ -11,10 +12,24 @@ const spacingScales = [
 ];
 
 export default function SpacingPage() {
-  const [baseSpacing, setBaseSpacing] = useState(4);
-  const [spacingScale, setSpacingScale] = useState(2);
-  const [baseRadius, setBaseRadius] = useState(4);
-  const [radiusScale, setRadiusScale] = useState(2);
+  const { tokens, updateSpacing } = useDesignTokens();
+  const [baseSpacing, setBaseSpacing] = useState(tokens.spacing.baseSpacing);
+  const [spacingScale, setSpacingScale] = useState(tokens.spacing.spacingScale);
+  const [baseRadius, setBaseRadius] = useState(tokens.spacing.baseRadius);
+  const [radiusScale, _setRadiusScale] = useState(tokens.spacing.radiusScale);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      updateSpacing({
+        baseSpacing,
+        spacingScale,
+        baseRadius,
+        radiusScale,
+      });
+    }, 300); // Debounce updates
+
+    return () => clearTimeout(timeoutId);
+  }, [baseSpacing, spacingScale, baseRadius, radiusScale, updateSpacing]);
 
   const generateSpacing = () => {
     if (spacingScale === 1.618) {

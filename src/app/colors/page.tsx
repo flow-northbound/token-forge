@@ -1,25 +1,46 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDesignTokens } from "@/lib/design-tokens-context";
 
 export default function ColorsPage() {
-  const [primaryColor, setPrimaryColor] = useState("#3b82f6");
-  const [errorColor, setErrorColor] = useState("#dc2626");
-  const [warningColor, setWarningColor] = useState("#f59e0b");
-  const [successColor, setSuccessColor] = useState("#16a34a");
-  const [foregroundHSBA, setForegroundHSBA] = useState({
-    h: 0,
-    s: 0,
-    b: 0,
-    a: 1,
-  });
-  const [backgroundHSBA, setBackgroundHSBA] = useState({
-    h: 0,
-    s: 0,
-    b: 100,
-    a: 1,
-  });
+  const { tokens, updateColors } = useDesignTokens();
+  const [primaryColor, setPrimaryColor] = useState(tokens.colors.primaryColor);
+  const [errorColor, setErrorColor] = useState(tokens.colors.errorColor);
+  const [warningColor, setWarningColor] = useState(tokens.colors.warningColor);
+  const [successColor, setSuccessColor] = useState(tokens.colors.successColor);
+  
+  const [foregroundHSBA, setForegroundHSBA] = useState(
+    tokens.colors.foregroundHSBA,
+  );
+  const [backgroundHSBA, setBackgroundHSBA] = useState(
+    tokens.colors.backgroundHSBA,
+  );
+
+  // Update colors when individual values change
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      updateColors({
+        primaryColor,
+        errorColor,
+        warningColor,
+        successColor,
+        foregroundHSBA,
+        backgroundHSBA,
+      });
+    }, 300); // Debounce updates
+
+    return () => clearTimeout(timeoutId);
+  }, [
+    primaryColor,
+    errorColor,
+    warningColor,
+    successColor,
+    foregroundHSBA,
+    backgroundHSBA,
+    updateColors,
+  ]);
 
   const hexToHSB = (hex: string) => {
     const r = parseInt(hex.substring(1, 3), 16) / 255;

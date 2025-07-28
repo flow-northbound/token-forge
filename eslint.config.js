@@ -29,7 +29,7 @@ export default tseslint.config(
       "readable-tailwind": eslintPluginReadableTailwind,
     },
     rules: {
-      ...eslintPluginReadableTailwind.configs.warning.rules,
+      ...(eslintPluginReadableTailwind.configs?.warning?.rules || {}),
       "@eslint-react/hooks-extra/no-direct-set-state-in-use-effect": "off",
       "@eslint-react/no-array-index-key": "off",
       "@typescript-eslint/no-explicit-any": "off",
@@ -41,6 +41,6 @@ export default tseslint.config(
         entryPoint: "src/css/globals.css",
       },
     },
-  }
+  },
   // fatima.eslint.noEnvRule("**/*.tsx"),
 );
