@@ -1,8 +1,8 @@
-import eslintReact from "@eslint-react/eslint-plugin";
 import eslintJs from "@eslint/js";
+import eslintReact from "@eslint-react/eslint-plugin";
 import eslintParserTypeScript from "@typescript-eslint/parser";
+import eslintPluginReadableTailwind from "eslint-plugin-better-tailwindcss";
 import perfectionist from "eslint-plugin-perfectionist";
-import eslintPluginReadableTailwind from "eslint-plugin-readable-tailwind";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
