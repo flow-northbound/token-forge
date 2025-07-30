@@ -2,139 +2,140 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+
 import { useDesignTokens } from "@/lib/design-tokens-context";
 
 const fontOptions = [
   // Sans-serif fonts
-  { name: "Inter", value: "Inter, sans-serif", category: "Sans-serif" },
-  { name: "Roboto", value: "Roboto, sans-serif", category: "Sans-serif" },
+  { category: "Sans-serif", name: "Inter", value: "Inter, sans-serif" },
+  { category: "Sans-serif", name: "Roboto", value: "Roboto, sans-serif" },
   {
+    category: "Sans-serif",
     name: "Open Sans",
     value: "'Open Sans', sans-serif",
-    category: "Sans-serif",
   },
-  { name: "Lato", value: "Lato, sans-serif", category: "Sans-serif" },
-  { name: "Poppins", value: "Poppins, sans-serif", category: "Sans-serif" },
+  { category: "Sans-serif", name: "Lato", value: "Lato, sans-serif" },
+  { category: "Sans-serif", name: "Poppins", value: "Poppins, sans-serif" },
   {
+    category: "Sans-serif",
     name: "Montserrat",
     value: "Montserrat, sans-serif",
-    category: "Sans-serif",
   },
-  { name: "Raleway", value: "Raleway, sans-serif", category: "Sans-serif" },
+  { category: "Sans-serif", name: "Raleway", value: "Raleway, sans-serif" },
   {
+    category: "Sans-serif",
     name: "Source Sans Pro",
     value: "'Source Sans Pro', sans-serif",
-    category: "Sans-serif",
   },
-  { name: "Nunito", value: "Nunito, sans-serif", category: "Sans-serif" },
+  { category: "Sans-serif", name: "Nunito", value: "Nunito, sans-serif" },
   {
+    category: "Sans-serif",
     name: "Work Sans",
     value: "'Work Sans', sans-serif",
-    category: "Sans-serif",
   },
-  { name: "DM Sans", value: "'DM Sans', sans-serif", category: "Sans-serif" },
-  { name: "Manrope", value: "Manrope, sans-serif", category: "Sans-serif" },
+  { category: "Sans-serif", name: "DM Sans", value: "'DM Sans', sans-serif" },
+  { category: "Sans-serif", name: "Manrope", value: "Manrope, sans-serif" },
   {
+    category: "Sans-serif",
     name: "Space Grotesk",
     value: "'Space Grotesk', sans-serif",
-    category: "Sans-serif",
   },
-  { name: "Outfit", value: "Outfit, sans-serif", category: "Sans-serif" },
+  { category: "Sans-serif", name: "Outfit", value: "Outfit, sans-serif" },
   {
+    category: "Sans-serif",
     name: "Plus Jakarta Sans",
     value: "'Plus Jakarta Sans', sans-serif",
-    category: "Sans-serif",
   },
-  { name: "Figtree", value: "Figtree, sans-serif", category: "Sans-serif" },
-  { name: "Satoshi", value: "Satoshi, sans-serif", category: "Sans-serif" },
-  { name: "Urbanist", value: "Urbanist, sans-serif", category: "Sans-serif" },
-  { name: "Quicksand", value: "Quicksand, sans-serif", category: "Sans-serif" },
+  { category: "Sans-serif", name: "Figtree", value: "Figtree, sans-serif" },
+  { category: "Sans-serif", name: "Satoshi", value: "Satoshi, sans-serif" },
+  { category: "Sans-serif", name: "Urbanist", value: "Urbanist, sans-serif" },
+  { category: "Sans-serif", name: "Quicksand", value: "Quicksand, sans-serif" },
 
   // Serif fonts
   {
+    category: "Serif",
     name: "Playfair Display",
     value: "'Playfair Display', serif",
-    category: "Serif",
   },
-  { name: "Merriweather", value: "Merriweather, serif", category: "Serif" },
-  { name: "Georgia", value: "Georgia, serif", category: "Serif" },
-  { name: "Lora", value: "Lora, serif", category: "Serif" },
-  { name: "Crimson Text", value: "'Crimson Text', serif", category: "Serif" },
-  { name: "PT Serif", value: "'PT Serif', serif", category: "Serif" },
-  { name: "Bitter", value: "Bitter, serif", category: "Serif" },
+  { category: "Serif", name: "Merriweather", value: "Merriweather, serif" },
+  { category: "Serif", name: "Georgia", value: "Georgia, serif" },
+  { category: "Serif", name: "Lora", value: "Lora, serif" },
+  { category: "Serif", name: "Crimson Text", value: "'Crimson Text', serif" },
+  { category: "Serif", name: "PT Serif", value: "'PT Serif', serif" },
+  { category: "Serif", name: "Bitter", value: "Bitter, serif" },
   {
+    category: "Serif",
     name: "Libre Baskerville",
     value: "'Libre Baskerville', serif",
-    category: "Serif",
   },
-  { name: "EB Garamond", value: "'EB Garamond', serif", category: "Serif" },
-  { name: "Cormorant", value: "Cormorant, serif", category: "Serif" },
+  { category: "Serif", name: "EB Garamond", value: "'EB Garamond', serif" },
+  { category: "Serif", name: "Cormorant", value: "Cormorant, serif" },
 
   // Display fonts
-  { name: "Bebas Neue", value: "'Bebas Neue', display", category: "Display" },
-  { name: "Righteous", value: "Righteous, display", category: "Display" },
+  { category: "Display", name: "Bebas Neue", value: "'Bebas Neue', display" },
+  { category: "Display", name: "Righteous", value: "Righteous, display" },
   {
+    category: "Display",
     name: "Alfa Slab One",
     value: "'Alfa Slab One', display",
-    category: "Display",
   },
   {
+    category: "Display",
     name: "Archivo Black",
     value: "'Archivo Black', display",
-    category: "Display",
   },
-  { name: "Passion One", value: "'Passion One', display", category: "Display" },
+  { category: "Display", name: "Passion One", value: "'Passion One', display" },
 
   // Monospace fonts
   {
+    category: "Monospace",
     name: "Roboto Mono",
     value: "'Roboto Mono', monospace",
-    category: "Monospace",
   },
   {
+    category: "Monospace",
     name: "JetBrains Mono",
     value: "'JetBrains Mono', monospace",
-    category: "Monospace",
   },
   {
+    category: "Monospace",
     name: "Source Code Pro",
     value: "'Source Code Pro', monospace",
-    category: "Monospace",
   },
   {
+    category: "Monospace",
     name: "IBM Plex Mono",
     value: "'IBM Plex Mono', monospace",
-    category: "Monospace",
   },
-  { name: "Fira Code", value: "'Fira Code', monospace", category: "Monospace" },
+  { category: "Monospace", name: "Fira Code", value: "'Fira Code', monospace" },
   {
+    category: "Monospace",
     name: "Space Mono",
     value: "'Space Mono', monospace",
-    category: "Monospace",
   },
   {
+    category: "Monospace",
     name: "Inconsolata",
     value: "Inconsolata, monospace",
-    category: "Monospace",
   },
 
   // System fonts
   {
+    category: "System",
     name: "System UI",
     value: "system-ui, -apple-system, sans-serif",
-    category: "System",
   },
-  { name: "Arial", value: "Arial, sans-serif", category: "System" },
-  { name: "Helvetica", value: "Helvetica, sans-serif", category: "System" },
+  { category: "System", name: "Arial", value: "Arial, sans-serif" },
+  { category: "System", name: "Helvetica", value: "Helvetica, sans-serif" },
   {
+    category: "System",
     name: "Times New Roman",
     value: "'Times New Roman', serif",
-    category: "System",
   },
   {
+    category: "System",
     name: "Courier New",
     value: "'Courier New', monospace",
-    category: "System",
   },
 ];
 
@@ -160,11 +161,11 @@ export default function TypographyPage() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       updateTypography({
-        headingFont,
-        bodyFont,
-        baseSize,
-        typeScale,
         baseLineHeight,
+        baseSize,
+        bodyFont,
+        headingFont,
+        typeScale,
       });
     }, 300); // Debounce updates
 
@@ -180,15 +181,15 @@ export default function TypographyPage() {
 
   const generateSizes = () => {
     return {
-      xs: Math.ceil(baseSize / typeScale),
-      sm: baseSize, // base size
       base: baseSize, // same as sm
-      lg: Math.ceil(baseSize * typeScale),
-      h4: Math.ceil(baseSize * typeScale * typeScale),
-      h3: Math.ceil(baseSize * Math.pow(typeScale, 3)),
-      h2: Math.ceil(baseSize * Math.pow(typeScale, 4)),
-      h1: Math.ceil(baseSize * Math.pow(typeScale, 5)),
       display: Math.ceil(baseSize * Math.pow(typeScale, 6)),
+      h1: Math.ceil(baseSize * Math.pow(typeScale, 5)),
+      h2: Math.ceil(baseSize * Math.pow(typeScale, 4)),
+      h3: Math.ceil(baseSize * Math.pow(typeScale, 3)),
+      h4: Math.ceil(baseSize * typeScale * typeScale),
+      lg: Math.ceil(baseSize * typeScale),
+      sm: baseSize, // base size
+      xs: Math.ceil(baseSize / typeScale),
     };
   };
 
@@ -208,8 +209,8 @@ export default function TypographyPage() {
   const sizes = generateSizes();
 
   const sizesWithLineHeight = Object.entries(sizes).map(([key, fontSize]) => ({
-    key,
     fontSize,
+    key,
     lineHeight: calculateLineHeight(fontSize),
     lineHeightPx: Math.ceil(fontSize * calculateLineHeight(fontSize)),
   }));
@@ -228,16 +229,16 @@ export default function TypographyPage() {
         <div className="space-y-8">
           <div>
             <label
-              htmlFor="heading-font"
               className="block text-sm font-medium mb-2"
+              htmlFor="heading-font"
             >
               Heading Font
             </label>
             <select
-              id="heading-font"
-              value={headingFont}
-              onChange={(e) => setHeadingFont(e.target.value)}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              id="heading-font"
+              onChange={(e) => setHeadingFont(e.target.value)}
+              value={headingFont}
             >
               {fontOptions.map((font) => (
                 <option key={font.name} value={font.value}>
@@ -249,16 +250,16 @@ export default function TypographyPage() {
 
           <div>
             <label
-              htmlFor="body-font"
               className="block text-sm font-medium mb-2"
+              htmlFor="body-font"
             >
               Body Font
             </label>
             <select
-              id="body-font"
-              value={bodyFont}
-              onChange={(e) => setBodyFont(e.target.value)}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              id="body-font"
+              onChange={(e) => setBodyFont(e.target.value)}
+              value={bodyFont}
             >
               {fontOptions.map((font) => (
                 <option key={font.name} value={font.value}>
@@ -270,34 +271,34 @@ export default function TypographyPage() {
 
           <div>
             <label
-              htmlFor="base-size"
               className="block text-sm font-medium mb-2"
+              htmlFor="base-size"
             >
               Base Font Size (px)
             </label>
             <input
-              type="number"
-              id="base-size"
-              value={baseSize}
-              onChange={(e) => setBaseSize(Number(e.target.value))}
-              min="12"
-              max="20"
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              id="base-size"
+              max="20"
+              min="12"
+              onChange={(e) => setBaseSize(Number(e.target.value))}
+              type="number"
+              value={baseSize}
             />
           </div>
 
           <div>
             <label
-              htmlFor="type-scale"
               className="block text-sm font-medium mb-2"
+              htmlFor="type-scale"
             >
               Type Scale
             </label>
             <select
-              id="type-scale"
-              value={typeScale}
-              onChange={(e) => setTypeScale(Number(e.target.value))}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              id="type-scale"
+              onChange={(e) => setTypeScale(Number(e.target.value))}
+              value={typeScale}
             >
               {typeScales.map((scale) => (
                 <option key={scale.name} value={scale.ratio}>
@@ -309,31 +310,31 @@ export default function TypographyPage() {
 
           <div>
             <label
-              htmlFor="line-height"
               className="block text-sm font-medium mb-2"
+              htmlFor="line-height"
             >
               Base Line Height
             </label>
             <div className="flex items-center gap-4">
               <input
-                type="range"
-                id="line-height"
-                value={baseLineHeight}
-                onChange={(e) => setBaseLineHeight(Number(e.target.value))}
-                min="1"
-                max="2"
-                step="0.05"
                 className="flex-1"
+                id="line-height"
+                max="2"
+                min="1"
+                onChange={(e) => setBaseLineHeight(Number(e.target.value))}
+                step="0.05"
+                type="range"
+                value={baseLineHeight}
               />
               <div className="flex items-center gap-2">
                 <input
+                  className="w-20 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  max="2"
+                  min="1"
+                  onChange={(e) => setBaseLineHeight(Number(e.target.value))}
+                  step="0.05"
                   type="number"
                   value={baseLineHeight}
-                  onChange={(e) => setBaseLineHeight(Number(e.target.value))}
-                  min="1"
-                  max="2"
-                  step="0.05"
-                  className="w-20 rounded-md border border-input bg-background px-3 py-2 text-sm"
                 />
                 <span className="text-sm text-muted-foreground">
                   ({Math.round(baseLineHeight * 100)}%)
@@ -351,18 +352,18 @@ export default function TypographyPage() {
               .slice()
               .reverse()
               .map((item) => {
-                const isHeading = ["h1", "h2", "h3", "h4", "display"].includes(
+                const isHeading = ["display", "h1", "h2", "h3", "h4"].includes(
                   item.key,
                 );
                 const font = isHeading ? headingFont : bodyFont;
                 const text = {
+                  base: "Body text - Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                   display: "Display",
                   h1: "Heading 1",
                   h2: "Heading 2",
                   h3: "Heading 3",
                   h4: "Heading 4",
                   lg: "Large text - Lorem ipsum dolor sit amet.",
-                  base: "Body text - Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                   sm: "Body text - Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
                   xs: "Small text - Lorem ipsum dolor sit amet.",
                 }[item.key];
@@ -406,8 +407,8 @@ export default function TypographyPage() {
                     .reverse()
                     .map((item, index) => (
                       <tr
-                        key={item.key}
                         className={index % 2 === 0 ? "bg-muted/20" : ""}
+                        key={item.key}
                       >
                         <td className="px-3 py-2 text-muted-foreground">
                           {item.key}
@@ -432,14 +433,14 @@ export default function TypographyPage() {
 
       <div className="mt-12 flex justify-between">
         <Link
-          href="/colors"
           className="inline-flex items-center rounded-md border border-input bg-background px-6 py-3 text-base font-medium hover:bg-accent hover:text-accent-foreground"
+          href="/colors"
         >
           Back: Colors
         </Link>
         <Link
-          href="/spacing"
           className="inline-flex items-center rounded-md bg-primary px-6 py-3 text-base font-medium text-primary-foreground shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          href="/spacing"
         >
           Next: Spacing & Radius
         </Link>

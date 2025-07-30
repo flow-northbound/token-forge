@@ -3,71 +3,71 @@
 import {
   createContext,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useEffect,
   useState,
 } from "react";
 
 interface ColorTokens {
-  primaryColor: string;
+  backgroundHSBA: { a: number; b: number; h: number; s: number; };
   errorColor: string;
-  warningColor: string;
+  foregroundHSBA: { a: number; b: number; h: number; s: number; };
+  primaryColor: string;
   successColor: string;
-  foregroundHSBA: { h: number; s: number; b: number; a: number };
-  backgroundHSBA: { h: number; s: number; b: number; a: number };
-}
-
-interface TypographyTokens {
-  headingFont: string;
-  bodyFont: string;
-  baseSize: number;
-  typeScale: number;
-  baseLineHeight: number;
-}
-
-interface SpacingTokens {
-  baseSpacing: number;
-  spacingScale: number;
-  baseRadius: number;
-  radiusScale: number;
+  warningColor: string;
 }
 
 interface DesignTokens {
   colors: ColorTokens;
-  typography: TypographyTokens;
   spacing: SpacingTokens;
+  typography: TypographyTokens;
 }
 
 interface DesignTokensContextType {
+  resetTokens: () => void;
   tokens: DesignTokens;
   updateColors: (colors: Partial<ColorTokens>) => void;
-  updateTypography: (typography: Partial<TypographyTokens>) => void;
   updateSpacing: (spacing: Partial<SpacingTokens>) => void;
-  resetTokens: () => void;
+  updateTypography: (typography: Partial<TypographyTokens>) => void;
+}
+
+interface SpacingTokens {
+  baseRadius: number;
+  baseSpacing: number;
+  radiusScale: number;
+  spacingScale: number;
+}
+
+interface TypographyTokens {
+  baseLineHeight: number;
+  baseSize: number;
+  bodyFont: string;
+  headingFont: string;
+  typeScale: number;
 }
 
 const defaultTokens: DesignTokens = {
   colors: {
-    primaryColor: "#3b82f6",
+    backgroundHSBA: { a: 1, b: 100, h: 0, s: 0 },
     errorColor: "#dc2626",
-    warningColor: "#f59e0b",
+    foregroundHSBA: { a: 1, b: 0, h: 0, s: 0 },
+    primaryColor: "#3b82f6",
     successColor: "#16a34a",
-    foregroundHSBA: { h: 0, s: 0, b: 0, a: 1 },
-    backgroundHSBA: { h: 0, s: 0, b: 100, a: 1 },
-  },
-  typography: {
-    headingFont: "Inter, sans-serif",
-    bodyFont: "Inter, sans-serif",
-    baseSize: 16,
-    typeScale: 1.25,
-    baseLineHeight: 1.5,
+    warningColor: "#f59e0b",
   },
   spacing: {
-    baseSpacing: 4,
-    spacingScale: 2,
     baseRadius: 4,
+    baseSpacing: 4,
     radiusScale: 2,
+    spacingScale: 2,
+  },
+  typography: {
+    baseLineHeight: 1.5,
+    baseSize: 16,
+    bodyFont: "Inter, sans-serif",
+    headingFont: "Inter, sans-serif",
+    typeScale: 1.25,
   },
 };
 
@@ -127,22 +127,22 @@ export function DesignTokensProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <DesignTokensContext.Provider
+    <DesignTokensContext
       value={{
+        resetTokens,
         tokens,
         updateColors,
-        updateTypography,
         updateSpacing,
-        resetTokens,
+        updateTypography,
       }}
     >
       {children}
-    </DesignTokensContext.Provider>
+    </DesignTokensContext>
   );
 }
 
 export function useDesignTokens() {
-  const context = useContext(DesignTokensContext);
+  const context = use(DesignTokensContext);
   if (context === undefined) {
     throw new Error(
       "useDesignTokens must be used within a DesignTokensProvider",

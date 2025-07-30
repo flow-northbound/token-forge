@@ -2,10 +2,17 @@
 
 import Link from "next/link";
 import { useState } from "react";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useDesignTokens } from "@/lib/design-tokens-context";
 
 export default function ExportPage() {
   const [exportFormat, setExportFormat] = useState("css");
+  const [copied, setCopied] = useState(false);
   const { tokens } = useDesignTokens();
 
   // Helper functions to convert HSB to RGB
@@ -18,9 +25,9 @@ export default function ExportPage() {
     const x = c * (1 - Math.abs(((hNorm * 6) % 2) - 1));
     const m = bNorm - c;
 
-    let r = 0,
+    let b_rgb = 0,
       g = 0,
-      b_rgb = 0;
+      r = 0;
 
     if (hNorm < 1 / 6) {
       r = c;
@@ -49,9 +56,9 @@ export default function ExportPage() {
     }
 
     return {
-      r: Math.round((r + m) * 255),
-      g: Math.round((g + m) * 255),
       b: Math.round((b_rgb + m) * 255),
+      g: Math.round((g + m) * 255),
+      r: Math.round((r + m) * 255),
     };
   };
 
@@ -59,9 +66,9 @@ export default function ExportPage() {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
           b: parseInt(result[3], 16),
+          g: parseInt(result[2], 16),
+          r: parseInt(result[1], 16),
         }
       : null;
   };
@@ -70,15 +77,15 @@ export default function ExportPage() {
   const generateFontSizes = () => {
     const { baseSize, typeScale } = tokens.typography;
     return {
-      xs: Math.ceil(baseSize / typeScale),
-      sm: baseSize, // base size
       base: baseSize, // same as sm
-      lg: Math.ceil(baseSize * typeScale),
-      h4: Math.ceil(baseSize * typeScale * typeScale),
-      h3: Math.ceil(baseSize * Math.pow(typeScale, 3)),
-      h2: Math.ceil(baseSize * Math.pow(typeScale, 4)),
-      h1: Math.ceil(baseSize * Math.pow(typeScale, 5)),
       display: Math.ceil(baseSize * Math.pow(typeScale, 6)),
+      h1: Math.ceil(baseSize * Math.pow(typeScale, 5)),
+      h2: Math.ceil(baseSize * Math.pow(typeScale, 4)),
+      h3: Math.ceil(baseSize * Math.pow(typeScale, 3)),
+      h4: Math.ceil(baseSize * typeScale * typeScale),
+      lg: Math.ceil(baseSize * typeScale),
+      sm: baseSize, // base size
+      xs: Math.ceil(baseSize / typeScale),
     };
   };
 
@@ -125,15 +132,15 @@ export default function ExportPage() {
   const generateRadius = () => {
     const { baseRadius } = tokens.spacing;
     return {
-      none: 0,
-      sm: baseRadius / 2,
-      DEFAULT: baseRadius,
-      md: baseRadius * 1.5,
-      lg: baseRadius * 2,
-      xl: baseRadius * 3,
       "2xl": baseRadius * 4,
       "3xl": baseRadius * 6,
+      DEFAULT: baseRadius,
       full: 9999,
+      lg: baseRadius * 2,
+      md: baseRadius * 1.5,
+      none: 0,
+      sm: baseRadius / 2,
+      xl: baseRadius * 3,
     };
   };
 
@@ -143,22 +150,22 @@ export default function ExportPage() {
     if (!rgb) return {};
 
     return {
-      text: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1.00)`,
+      fill: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.05)`,
       "stroke-strong": `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.80)`,
       "stroke-weak": `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.20)`,
-      fill: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.05)`,
+      text: `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1.00)`,
     };
   };
 
   // Generate monochromatic scale
   const generateMonochromaticScale = () => {
     const scale = [
-      { name: "text-strong", h: 230, s: 100, b: 15, a: 0.9 },
-      { name: "text-weak", h: 230, s: 100, b: 20, a: 0.65 },
-      { name: "stroke-strong", h: 230, s: 100, b: 30, a: 0.45 },
-      { name: "stroke-weak", h: 230, s: 100, b: 40, a: 0.1 },
-      { name: "fill-weak", h: 230, s: 100, b: 50, a: 0.04 },
-      { name: "fill-weaker", h: 230, s: 100, b: 50, a: 0.02 },
+      { a: 0.9, b: 15, h: 230, name: "text-strong", s: 100 },
+      { a: 0.65, b: 20, h: 230, name: "text-weak", s: 100 },
+      { a: 0.45, b: 30, h: 230, name: "stroke-strong", s: 100 },
+      { a: 0.1, b: 40, h: 230, name: "stroke-weak", s: 100 },
+      { a: 0.04, b: 50, h: 230, name: "fill-weak", s: 100 },
+      { a: 0.02, b: 50, h: 230, name: "fill-weaker", s: 100 },
     ];
 
     const result: Record<string, string> = {};
@@ -178,64 +185,64 @@ export default function ExportPage() {
     const successRgb = hexToRgb(tokens.colors.successColor);
 
     const semanticTokens: Record<string, string> = {
-      // Text tokens
-      "text-strong": monoScale["text-strong"],
-      "text-weak": monoScale["text-weak"],
-      "text-brand": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 1)` : tokens.colors.primaryColor,
-      "text-disabled": `rgba(150, 150, 150, 0.5)`, // Medium gray with moderate opacity
-      "text-error": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 1)` : tokens.colors.errorColor,
-      "text-warning": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 1)` : tokens.colors.warningColor,
-      "text-success": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 1)` : tokens.colors.successColor,
-      
+      "bg-active": `rgba(0, 0, 0, 0.04)`,
       // Background tokens
       "bg-base": `rgba(255, 255, 255, 1)`,
-      "bg-subtle": `rgba(250, 250, 250, 1)`,
       "bg-brand": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.05)` : tokens.colors.primaryColor,
       "bg-brand-strong": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 1)` : tokens.colors.primaryColor,
       "bg-error": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.05)` : tokens.colors.errorColor,
-      "bg-warning": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.05)` : tokens.colors.warningColor,
+      "bg-hover": `rgba(0, 0, 0, 0.02)`,
+      "bg-subtle": `rgba(250, 250, 250, 1)`,
+      
       "bg-success": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.05)` : tokens.colors.successColor,
+      "bg-warning": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.05)` : tokens.colors.warningColor,
+      // Border tokens (legacy naming for compatibility)
+      "border-base": monoScale["stroke-weak"],
+      "border-brand": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.2)` : tokens.colors.primaryColor,
+      "border-error": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.2)` : tokens.colors.errorColor,
+      "border-focus": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)` : tokens.colors.primaryColor,
+      "border-strong": monoScale["stroke-strong"],
       
-      // Stroke tokens
-      "stroke-strong": monoScale["stroke-strong"],
-      "stroke-weak": monoScale["stroke-weak"],
-      "stroke-selected": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.8)` : tokens.colors.primaryColor,
-      "stroke-focus": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)` : tokens.colors.primaryColor,
-      "stroke-disabled": `rgba(200, 200, 200, 0.3)`,
-      
-      // Stroke with brand emphasis
-      "stroke-brand-weak": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.2)` : tokens.colors.primaryColor,
+      "border-success": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.2)` : tokens.colors.successColor,
+      "border-warning": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.2)` : tokens.colors.warningColor,
       "stroke-brand-medium": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)` : tokens.colors.primaryColor,
       "stroke-brand-strong": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.8)` : tokens.colors.primaryColor,
+      // Stroke with brand emphasis
+      "stroke-brand-weak": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.2)` : tokens.colors.primaryColor,
       
-      // Stroke with error emphasis
-      "stroke-error-weak": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.2)` : tokens.colors.errorColor,
+      "stroke-disabled": `rgba(200, 200, 200, 0.3)`,
       "stroke-error-medium": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.5)` : tokens.colors.errorColor,
       "stroke-error-strong": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.8)` : tokens.colors.errorColor,
       
-      // Stroke with warning emphasis
-      "stroke-warning-weak": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.2)` : tokens.colors.warningColor,
-      "stroke-warning-medium": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.5)` : tokens.colors.warningColor,
-      "stroke-warning-strong": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.8)` : tokens.colors.warningColor,
+      // Stroke with error emphasis
+      "stroke-error-weak": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.2)` : tokens.colors.errorColor,
+      "stroke-focus": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)` : tokens.colors.primaryColor,
+      "stroke-selected": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.8)` : tokens.colors.primaryColor,
       
-      // Stroke with success emphasis
-      "stroke-success-weak": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.2)` : tokens.colors.successColor,
+      // Stroke tokens
+      "stroke-strong": monoScale["stroke-strong"],
       "stroke-success-medium": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.5)` : tokens.colors.successColor,
       "stroke-success-strong": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.8)` : tokens.colors.successColor,
       
-      // Border tokens (legacy naming for compatibility)
-      "border-base": monoScale["stroke-weak"],
-      "border-strong": monoScale["stroke-strong"],
-      "border-brand": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.2)` : tokens.colors.primaryColor,
-      "border-error": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.2)` : tokens.colors.errorColor,
-      "border-warning": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.2)` : tokens.colors.warningColor,
-      "border-success": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.2)` : tokens.colors.successColor,
+      // Stroke with success emphasis
+      "stroke-success-weak": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.2)` : tokens.colors.successColor,
+      "stroke-warning-medium": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.5)` : tokens.colors.warningColor,
+      "stroke-warning-strong": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.8)` : tokens.colors.warningColor,
       
+      // Stroke with warning emphasis
+      "stroke-warning-weak": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.2)` : tokens.colors.warningColor,
+      "stroke-weak": monoScale["stroke-weak"],
+      "text-brand": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 1)` : tokens.colors.primaryColor,
       // Interactive states
       "text-brand-hover": primaryRgb ? `rgba(${Math.max(0, primaryRgb.r - 30)}, ${Math.max(0, primaryRgb.g - 30)}, ${Math.max(0, primaryRgb.b - 30)}, 1)` : tokens.colors.primaryColor,
-      "bg-hover": `rgba(0, 0, 0, 0.02)`,
-      "bg-active": `rgba(0, 0, 0, 0.04)`,
-      "border-focus": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)` : tokens.colors.primaryColor,
+      "text-disabled": `rgba(150, 150, 150, 0.5)`, // Medium gray with moderate opacity
+      "text-error": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 1)` : tokens.colors.errorColor,
+      
+      // Text tokens
+      "text-strong": monoScale["text-strong"],
+      "text-success": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 1)` : tokens.colors.successColor,
+      "text-warning": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 1)` : tokens.colors.warningColor,
+      "text-weak": monoScale["text-weak"],
     };
 
     return semanticTokens;
@@ -314,38 +321,38 @@ export default function ExportPage() {
     const radius = generateRadius();
 
     const exportData = {
+      borderRadius: radius,
       colors: {
+        error: {
+          base: tokens.colors.errorColor,
+          scale: generateColorScale(tokens.colors.errorColor),
+        },
+        monochromatic: generateMonochromaticScale(),
         primary: {
           base: tokens.colors.primaryColor,
           scale: generateColorScale(tokens.colors.primaryColor),
         },
-        error: {
-          base: tokens.colors.errorColor,
-          scale: generateColorScale(tokens.colors.errorColor),
+        semantic: generateSemanticTokens(),
+        success: {
+          base: tokens.colors.successColor,
+          scale: generateColorScale(tokens.colors.successColor),
         },
         warning: {
           base: tokens.colors.warningColor,
           scale: generateColorScale(tokens.colors.warningColor),
         },
-        success: {
-          base: tokens.colors.successColor,
-          scale: generateColorScale(tokens.colors.successColor),
-        },
-        monochromatic: generateMonochromaticScale(),
-        semantic: generateSemanticTokens(),
       },
+      spacing: spacing,
       typography: {
         fonts: {
-          heading: tokens.typography.headingFont,
           body: tokens.typography.bodyFont,
+          heading: tokens.typography.headingFont,
         },
-        sizes: fontSizes,
         lineHeight: {
           base: tokens.typography.baseLineHeight,
         },
+        sizes: fontSizes,
       },
-      spacing: spacing,
-      borderRadius: radius,
     };
 
     return JSON.stringify(exportData, null, 2);
@@ -425,10 +432,10 @@ export default function ExportPage() {
     switch (exportFormat) {
       case "css":
         return generateCSS();
-      case "json":
-        return generateJSON();
       case "js":
         return generateJS();
+      case "json":
+        return generateJSON();
       case "scss":
         return generateSCSS();
       default:
@@ -452,6 +459,8 @@ export default function ExportPage() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(exportContent);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -464,14 +473,14 @@ export default function ExportPage() {
       </div>
 
       <div className="mb-8">
-        <label htmlFor="format" className="block text-sm font-medium mb-2">
+        <label className="block text-sm font-medium mb-2" htmlFor="format">
           Export Format
         </label>
         <select
-          id="format"
-          value={exportFormat}
-          onChange={(e) => setExportFormat(e.target.value)}
           className="flex h-10 w-full max-w-xs rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          id="format"
+          onChange={(e) => setExportFormat(e.target.value)}
+          value={exportFormat}
         >
           <option value="css">CSS Variables</option>
           <option value="scss">SCSS Variables</option>
@@ -484,17 +493,24 @@ export default function ExportPage() {
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Preview</h2>
           <div className="flex gap-2">
+            <Tooltip open={copied}>
+              <TooltipTrigger asChild>
+                <button
+                  className="inline-flex items-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                  onClick={copyToClipboard}
+                  type="button"
+                >
+                  Copy to Clipboard
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Copied!</p>
+              </TooltipContent>
+            </Tooltip>
             <button
-              type="button"
-              onClick={copyToClipboard}
-              className="inline-flex items-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-            >
-              Copy to Clipboard
-            </button>
-            <button
-              type="button"
-              onClick={downloadFile}
               className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm hover:bg-primary/90"
+              onClick={downloadFile}
+              type="button"
             >
               Download File
             </button>
@@ -508,14 +524,14 @@ export default function ExportPage() {
 
       <div className="flex justify-between">
         <Link
-          href="/spacing"
           className="inline-flex items-center rounded-md border border-input bg-background px-6 py-3 text-base font-medium hover:bg-accent hover:text-accent-foreground"
+          href="/spacing"
         >
           Back: Spacing & Radius
         </Link>
         <Link
-          href="/"
           className="inline-flex items-center rounded-md bg-primary px-6 py-3 text-base font-medium text-primary-foreground shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          href="/"
         >
           Start Over
         </Link>

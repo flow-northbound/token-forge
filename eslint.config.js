@@ -1,5 +1,5 @@
-import eslintJs from "@eslint/js";
 import eslintReact from "@eslint-react/eslint-plugin";
+import eslintJs from "@eslint/js";
 import eslintParserTypeScript from "@typescript-eslint/parser";
 import eslintPluginReadableTailwind from "eslint-plugin-better-tailwindcss";
 import perfectionist from "eslint-plugin-perfectionist";

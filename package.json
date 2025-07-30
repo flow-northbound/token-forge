@@ -18,6 +18,11 @@
     "tests": "pnpm dlx  test ./.tests"
   },
   "dependencies": {
+    "@radix-ui/react-alert-dialog": "^1.1.14",
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-popover": "^1.1.14",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tooltip": "^1.2.7",
     "arktype": "^2.1.20",
     "better-auth": "^1.2.12",
     "class-variance-authority": "^0.7.1",
