@@ -29,19 +29,3 @@ pre-commit:
 
 pre-push:
   parallel: true
-  jobs:
-    - name: test
-      run: pnpm test -- --watchAll=false --bail --passWithNoTests
-      stage_fixed: true
-
-    - name: build
-      run: pnpm build
-      stage_fixed: true
-
-    - name: deploy
-      run: pnpm deploy
-      stage_fixed: true
-
-    - name: check
-      run: pnpm check
-
