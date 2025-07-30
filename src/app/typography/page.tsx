@@ -182,10 +182,10 @@ export default function TypographyPage() {
   const generateSizes = () => {
     return {
       base: baseSize, // same as sm
-      display: Math.ceil(baseSize * Math.pow(typeScale, 6)),
-      h1: Math.ceil(baseSize * Math.pow(typeScale, 5)),
-      h2: Math.ceil(baseSize * Math.pow(typeScale, 4)),
-      h3: Math.ceil(baseSize * Math.pow(typeScale, 3)),
+      display: Math.ceil(baseSize * typeScale ** 6),
+      h1: Math.ceil(baseSize * typeScale ** 5),
+      h2: Math.ceil(baseSize * typeScale ** 4),
+      h3: Math.ceil(baseSize * typeScale ** 3),
       h4: Math.ceil(baseSize * typeScale * typeScale),
       lg: Math.ceil(baseSize * typeScale),
       sm: baseSize, // base size

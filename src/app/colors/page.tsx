@@ -11,7 +11,7 @@ export default function ColorsPage() {
   const [errorColor, setErrorColor] = useState(tokens.colors.errorColor);
   const [warningColor, setWarningColor] = useState(tokens.colors.warningColor);
   const [successColor, setSuccessColor] = useState(tokens.colors.successColor);
-  
+
   const [foregroundHSBA, setForegroundHSBA] = useState(
     tokens.colors.foregroundHSBA,
   );
@@ -140,7 +140,7 @@ export default function ColorsPage() {
       r: Math.round(bgRGB.r * bg.a + 255 * (1 - bg.a)),
     };
 
-    const getLuminance = (rgb: { b: number; g: number; r: number; }) => {
+    const getLuminance = (rgb: { b: number; g: number; r: number }) => {
       const rsRGB = rgb.r / 255;
       const gsRGB = rgb.g / 255;
       const bsRGB = rgb.b / 255;

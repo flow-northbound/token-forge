@@ -78,10 +78,10 @@ export default function ExportPage() {
     const { baseSize, typeScale } = tokens.typography;
     return {
       base: baseSize, // same as sm
-      display: Math.ceil(baseSize * Math.pow(typeScale, 6)),
-      h1: Math.ceil(baseSize * Math.pow(typeScale, 5)),
-      h2: Math.ceil(baseSize * Math.pow(typeScale, 4)),
-      h3: Math.ceil(baseSize * Math.pow(typeScale, 3)),
+      display: Math.ceil(baseSize * typeScale ** 6),
+      h1: Math.ceil(baseSize * typeScale ** 5),
+      h2: Math.ceil(baseSize * typeScale ** 4),
+      h3: Math.ceil(baseSize * typeScale ** 3),
       h4: Math.ceil(baseSize * typeScale * typeScale),
       lg: Math.ceil(baseSize * typeScale),
       sm: baseSize, // base size
@@ -188,60 +188,118 @@ export default function ExportPage() {
       "bg-active": `rgba(0, 0, 0, 0.04)`,
       // Background tokens
       "bg-base": `rgba(255, 255, 255, 1)`,
-      "bg-brand": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.05)` : tokens.colors.primaryColor,
-      "bg-brand-strong": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 1)` : tokens.colors.primaryColor,
-      "bg-error": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.05)` : tokens.colors.errorColor,
+      "bg-brand": primaryRgb
+        ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.05)`
+        : tokens.colors.primaryColor,
+      "bg-brand-strong": primaryRgb
+        ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 1)`
+        : tokens.colors.primaryColor,
+      "bg-error": errorRgb
+        ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.05)`
+        : tokens.colors.errorColor,
       "bg-hover": `rgba(0, 0, 0, 0.02)`,
       "bg-subtle": `rgba(250, 250, 250, 1)`,
-      
-      "bg-success": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.05)` : tokens.colors.successColor,
-      "bg-warning": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.05)` : tokens.colors.warningColor,
+
+      "bg-success": successRgb
+        ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.05)`
+        : tokens.colors.successColor,
+      "bg-warning": warningRgb
+        ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.05)`
+        : tokens.colors.warningColor,
       // Border tokens (legacy naming for compatibility)
       "border-base": monoScale["stroke-weak"],
-      "border-brand": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.2)` : tokens.colors.primaryColor,
-      "border-error": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.2)` : tokens.colors.errorColor,
-      "border-focus": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)` : tokens.colors.primaryColor,
+      "border-brand": primaryRgb
+        ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.2)`
+        : tokens.colors.primaryColor,
+      "border-error": errorRgb
+        ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.2)`
+        : tokens.colors.errorColor,
+      "border-focus": primaryRgb
+        ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)`
+        : tokens.colors.primaryColor,
       "border-strong": monoScale["stroke-strong"],
-      
-      "border-success": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.2)` : tokens.colors.successColor,
-      "border-warning": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.2)` : tokens.colors.warningColor,
-      "stroke-brand-medium": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)` : tokens.colors.primaryColor,
-      "stroke-brand-strong": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.8)` : tokens.colors.primaryColor,
+
+      "border-success": successRgb
+        ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.2)`
+        : tokens.colors.successColor,
+      "border-warning": warningRgb
+        ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.2)`
+        : tokens.colors.warningColor,
+      "stroke-brand-medium": primaryRgb
+        ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)`
+        : tokens.colors.primaryColor,
+      "stroke-brand-strong": primaryRgb
+        ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.8)`
+        : tokens.colors.primaryColor,
       // Stroke with brand emphasis
-      "stroke-brand-weak": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.2)` : tokens.colors.primaryColor,
-      
+      "stroke-brand-weak": primaryRgb
+        ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.2)`
+        : tokens.colors.primaryColor,
+
       "stroke-disabled": `rgba(200, 200, 200, 0.3)`,
-      "stroke-error-medium": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.5)` : tokens.colors.errorColor,
-      "stroke-error-strong": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.8)` : tokens.colors.errorColor,
-      
+      "stroke-error-medium": errorRgb
+        ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.5)`
+        : tokens.colors.errorColor,
+      "stroke-error-strong": errorRgb
+        ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.8)`
+        : tokens.colors.errorColor,
+
       // Stroke with error emphasis
-      "stroke-error-weak": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.2)` : tokens.colors.errorColor,
-      "stroke-focus": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)` : tokens.colors.primaryColor,
-      "stroke-selected": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.8)` : tokens.colors.primaryColor,
-      
+      "stroke-error-weak": errorRgb
+        ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 0.2)`
+        : tokens.colors.errorColor,
+      "stroke-focus": primaryRgb
+        ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.5)`
+        : tokens.colors.primaryColor,
+      "stroke-selected": primaryRgb
+        ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 0.8)`
+        : tokens.colors.primaryColor,
+
       // Stroke tokens
       "stroke-strong": monoScale["stroke-strong"],
-      "stroke-success-medium": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.5)` : tokens.colors.successColor,
-      "stroke-success-strong": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.8)` : tokens.colors.successColor,
-      
+      "stroke-success-medium": successRgb
+        ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.5)`
+        : tokens.colors.successColor,
+      "stroke-success-strong": successRgb
+        ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.8)`
+        : tokens.colors.successColor,
+
       // Stroke with success emphasis
-      "stroke-success-weak": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.2)` : tokens.colors.successColor,
-      "stroke-warning-medium": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.5)` : tokens.colors.warningColor,
-      "stroke-warning-strong": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.8)` : tokens.colors.warningColor,
-      
+      "stroke-success-weak": successRgb
+        ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 0.2)`
+        : tokens.colors.successColor,
+      "stroke-warning-medium": warningRgb
+        ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.5)`
+        : tokens.colors.warningColor,
+      "stroke-warning-strong": warningRgb
+        ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.8)`
+        : tokens.colors.warningColor,
+
       // Stroke with warning emphasis
-      "stroke-warning-weak": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.2)` : tokens.colors.warningColor,
+      "stroke-warning-weak": warningRgb
+        ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 0.2)`
+        : tokens.colors.warningColor,
       "stroke-weak": monoScale["stroke-weak"],
-      "text-brand": primaryRgb ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 1)` : tokens.colors.primaryColor,
+      "text-brand": primaryRgb
+        ? `rgba(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}, 1)`
+        : tokens.colors.primaryColor,
       // Interactive states
-      "text-brand-hover": primaryRgb ? `rgba(${Math.max(0, primaryRgb.r - 30)}, ${Math.max(0, primaryRgb.g - 30)}, ${Math.max(0, primaryRgb.b - 30)}, 1)` : tokens.colors.primaryColor,
+      "text-brand-hover": primaryRgb
+        ? `rgba(${Math.max(0, primaryRgb.r - 30)}, ${Math.max(0, primaryRgb.g - 30)}, ${Math.max(0, primaryRgb.b - 30)}, 1)`
+        : tokens.colors.primaryColor,
       "text-disabled": `rgba(150, 150, 150, 0.5)`, // Medium gray with moderate opacity
-      "text-error": errorRgb ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 1)` : tokens.colors.errorColor,
-      
+      "text-error": errorRgb
+        ? `rgba(${errorRgb.r}, ${errorRgb.g}, ${errorRgb.b}, 1)`
+        : tokens.colors.errorColor,
+
       // Text tokens
       "text-strong": monoScale["text-strong"],
-      "text-success": successRgb ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 1)` : tokens.colors.successColor,
-      "text-warning": warningRgb ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 1)` : tokens.colors.warningColor,
+      "text-success": successRgb
+        ? `rgba(${successRgb.r}, ${successRgb.g}, ${successRgb.b}, 1)`
+        : tokens.colors.successColor,
+      "text-warning": warningRgb
+        ? `rgba(${warningRgb.r}, ${warningRgb.g}, ${warningRgb.b}, 1)`
+        : tokens.colors.warningColor,
       "text-weak": monoScale["text-weak"],
     };
 

@@ -10,9 +10,9 @@ import {
 } from "react";
 
 interface ColorTokens {
-  backgroundHSBA: { a: number; b: number; h: number; s: number; };
+  backgroundHSBA: { a: number; b: number; h: number; s: number };
   errorColor: string;
-  foregroundHSBA: { a: number; b: number; h: number; s: number; };
+  foregroundHSBA: { a: number; b: number; h: number; s: number };
   primaryColor: string;
   successColor: string;
   warningColor: string;
@@ -107,12 +107,15 @@ export function DesignTokensProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
-  const updateTypography = useCallback((typography: Partial<TypographyTokens>) => {
-    setTokens((prev) => ({
-      ...prev,
-      typography: { ...prev.typography, ...typography },
-    }));
-  }, []);
+  const updateTypography = useCallback(
+    (typography: Partial<TypographyTokens>) => {
+      setTokens((prev) => ({
+        ...prev,
+        typography: { ...prev.typography, ...typography },
+      }));
+    },
+    [],
+  );
 
   const updateSpacing = useCallback((spacing: Partial<SpacingTokens>) => {
     setTokens((prev) => ({
