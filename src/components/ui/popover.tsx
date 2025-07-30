@@ -5,6 +5,7 @@ import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+// This file is a wrapper around Radix UI's Popover component.
 function Popover({
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Root>) {

@@ -4,21 +4,27 @@
 #   https://lefthook.dev/configuration/
 #
 
-
 pre-commit:
   jobs:
     - name: format
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-      run: pnpm exec biome format --write  --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+      run: pnpm exec biome format --write {staged_files}
       stage_fixed: true
 
-    - name: lint
+    - name: tsc
+      run: pnpm exec tsc --noEmit
+
+    - name: eslint
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-      run: pnpm lint {staged_files}
+      run: pnpm exec eslint --cache --fix {staged_files}
       stage_fixed: true
 
-    - name: check
-      run: pnpm check
+    - name: biome
+      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+      run: pnpm exec biome check --fix --unsafe {staged_files}
+
+    - name: knip
+      run: echo "Running knip but ignoring output warnings..." | pnpm exec knip --no-exit-code
 
 
 pre-push:
