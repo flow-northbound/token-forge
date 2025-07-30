@@ -4,7 +4,6 @@ import eslintJs from "@eslint/js";
 import eslintReact from "@eslint-react/eslint-plugin";
 import eslintParserTypeScript from "@typescript-eslint/parser";
 import eslintPluginReadableTailwind from "eslint-plugin-better-tailwindcss";
-import perfectionist from "eslint-plugin-perfectionist";
 import tseslint from "typescript-eslint";
 
 const compat = new FlatCompat({
@@ -18,8 +17,12 @@ const eslintConfig = [
   ...compat.config({
     extends: ["next/core-web-vitals"],
   }),
-  ...(Array.isArray(tseslint.configs.recommended) ? tseslint.configs.recommended : [tseslint.configs.recommended]),
-  ...(Array.isArray(tseslint.configs.stylistic) ? tseslint.configs.stylistic : [tseslint.configs.stylistic]),
+  ...(Array.isArray(tseslint.configs.recommended)
+    ? tseslint.configs.recommended
+    : [tseslint.configs.recommended]),
+  ...(Array.isArray(tseslint.configs.stylistic)
+    ? tseslint.configs.stylistic
+    : [tseslint.configs.stylistic]),
   { ignores: ["node_modules", ".next", "*.config.*"] },
   {
     files: ["**/*.{ts,tsx}"],
@@ -32,7 +35,6 @@ const eslintConfig = [
       },
     },
   },
-  perfectionist.configs["recommended-natural"],
   {
     files: ["**/*.{ts,tsx}"],
     plugins: {

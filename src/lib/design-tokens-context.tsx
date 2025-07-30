@@ -6,6 +6,7 @@ import {
   use,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -129,18 +130,19 @@ export function DesignTokensProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
+  const contextValue = useMemo(
+    () => ({
+      resetTokens,
+      tokens,
+      updateColors,
+      updateSpacing,
+      updateTypography,
+    }),
+    [resetTokens, tokens, updateColors, updateSpacing, updateTypography],
+  );
+
   return (
-    <DesignTokensContext
-      value={{
-        resetTokens,
-        tokens,
-        updateColors,
-        updateSpacing,
-        updateTypography,
-      }}
-    >
-      {children}
-    </DesignTokensContext>
+    <DesignTokensContext value={contextValue}>{children}</DesignTokensContext>
   );
 }
 

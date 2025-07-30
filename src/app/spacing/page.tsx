@@ -17,7 +17,7 @@ export default function SpacingPage() {
   const [baseSpacing, setBaseSpacing] = useState(tokens.spacing.baseSpacing);
   const [spacingScale, setSpacingScale] = useState(tokens.spacing.spacingScale);
   const [baseRadius, setBaseRadius] = useState(tokens.spacing.baseRadius);
-  const [radiusScale, _setRadiusScale] = useState(tokens.spacing.radiusScale);
+  const [radiusScale] = useState(tokens.spacing.radiusScale);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
